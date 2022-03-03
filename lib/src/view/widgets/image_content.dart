@@ -1,7 +1,3 @@
-
-
-
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -30,18 +26,24 @@ class ImageContent extends StatelessWidget {
       decoration: BoxDecoration(
           image: DecorationImage(
               fit: BoxFit.fill,
-              image: CachedNetworkImageProvider(feedModel.defaultPhotoUrl!))),
+              image: CachedNetworkImageProvider(feedModel.defaultPhotoUrl ??
+                  "https://logowik.com/content/uploads/images/flutter5786.jpg"))),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ReusableRowInImgWidget(
               iconLink: "assets/img/Options.svg",
+              id: feedModel.id!,
               name: feedModel.authorUsername!,
               imgURL: feedModel.authorPhotoUrl!,
               color: const Color(0xFFFF0040),
               subName: feedModel.authorFullName!),
           ReusableRowInImgWidget(
-              imgURL: feedModel.placeLogoUrl ?? feedModel.authorPhotoUrl!,
+              // Actually the most of placeLogoURL return 500 or 404 and that's caused laggy and performance issue
+              //  imgURL: feedModel.placeLogoUrl ?? feedModel.authorPhotoUrl!,
+              imgURL: feedModel.authorPhotoUrl!,
+              id: feedModel.id!,
+              tappedIconLink: "assets/img/Star.svg",
               iconLink: "assets/img/StarBorder.svg",
               name: feedModel.placeName!,
               color: Colors.white,

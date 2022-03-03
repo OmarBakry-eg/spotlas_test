@@ -71,6 +71,7 @@ class FeedScreen extends StatelessWidget {
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemBuilder: (c, i) => FeedContent(
+                              bloc: _bloc,
                               feedModel: _bloc.myFeed[i],
                             ),
                             itemCount: _bloc.myFeed.length,

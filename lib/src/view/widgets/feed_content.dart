@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:readmore/readmore.dart';
 import 'package:spotlas_test_app/src/models/feed_model.dart';
+import 'package:spotlas_test_app/src/providers/feed_cubit/feed_cubit.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import '../../providers/feed_cubit/feed_state.dart';
 import 'image_content.dart';
 import 'tags_widget.dart';
 
 class FeedContent extends StatelessWidget {
   final FeedModel feedModel;
-  const FeedContent({Key? key, required this.feedModel}) : super(key: key);
+  final FeedCubit bloc;
+  const FeedContent({Key? key, required this.feedModel, required this.bloc})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +35,25 @@ class FeedContent extends StatelessWidget {
               height: 25,
             ),
             SvgPicture.asset("assets/img/Comment.svg"),
-            SvgPicture.asset(
-              "assets/img/HeartBorder.svg",
-              width: 25,
-              height: 25,
+            BlocBuilder<FeedCubit, FeedState>(
+              buildWhen: (prev, current) {
+                return current is LikePost || current is DislikePost;
+              },
+              builder: (context, state) {
+                return GestureDetector(
+                  onTap: () {
+                    bloc.likeOrDislike(id: feedModel.id!);
+                  },
+                  child: SvgPicture.asset(
+                    bloc.likedPosts.contains(feedModel.id!)
+                        ? "assets/img/Heart.svg"
+                        : "assets/img/HeartBorder.svg",
+                    width: 25,
+                    height: 25,
+                    color: bloc.likedPosts.contains(feedModel.id!) ? Colors.red : null,
+                  ),
+                );
+              },
             ),
             SvgPicture.asset("assets/img/Share.svg"),
           ],

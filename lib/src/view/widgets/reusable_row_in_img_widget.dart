@@ -1,24 +1,33 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:spotlas_test_app/src/providers/feed_cubit/feed_cubit.dart';
+
+import '../../providers/feed_cubit/feed_state.dart';
 
 class ReusableRowInImgWidget extends StatelessWidget {
   final String name;
   final String subName;
   final String iconLink;
+  final String? tappedIconLink;
   final String imgURL;
   final Color color;
+  final String id;
   const ReusableRowInImgWidget(
       {Key? key,
       required this.iconLink,
       required this.name,
       required this.subName,
+      this.tappedIconLink,
+      required this.id,
       required this.imgURL,
       required this.color})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final FeedCubit _bloc = BlocProvider.of<FeedCubit>(context);
     return Row(
       children: [
         Padding(
@@ -29,7 +38,7 @@ class ReusableRowInImgWidget extends StatelessWidget {
             decoration: BoxDecoration(
                 image: DecorationImage(image: CachedNetworkImageProvider(imgURL)),
                 color: Colors.black12,
-                border: Border.all(color: color, width: 5),
+                border: Border.all(color: color, width: 3),
                 shape: BoxShape.circle),
           ),
         ),
@@ -84,11 +93,27 @@ class ReusableRowInImgWidget extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: SvgPicture.asset(
-            iconLink,
-            width: 25,
-            height: 25,
-            color: Colors.white,
+          child: BlocBuilder<FeedCubit, FeedState>(
+            buildWhen: (p, c) {
+              return c is SavePost || c is UnSavePost;
+            },
+            bloc: _bloc,
+            builder: (context, state) {
+              return GestureDetector(
+                onTap: () {
+                  if (tappedIconLink == null) {
+                    return;
+                  }
+                  _bloc.saveOrUnsave(id: id);
+                },
+                child: SvgPicture.asset(
+                tappedIconLink == null ? iconLink : _bloc.savedPosts.contains(id) ? tappedIconLink! : iconLink,
+                  width: 25,
+                  height: 25,
+                  color:   tappedIconLink == null ? Colors.white : _bloc.savedPosts.contains(id) ? Colors.amber : Colors.white,
+                ),
+              );
+            },
           ),
         )
       ],

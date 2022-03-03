@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:spotlas_test_app/src/models/feed_model.dart';
 import 'package:spotlas_test_app/src/res/feed_controller.dart';
-
 import 'feed_state.dart';
 
 class FeedCubit extends Cubit<FeedState> {
@@ -13,6 +12,8 @@ class FeedCubit extends Cubit<FeedState> {
   bool loadInPagination = false;
   List<FeedModel> myFeed = [];
   int page = 1;
+  List<String> likedPosts = [];
+  List<String> savedPosts = [];
   final scrollController = ScrollController();
   Future<void> fetchAllFeed() async {
     await EasyLoading.show(status: 'Loading');
@@ -58,6 +59,32 @@ class FeedCubit extends Cubit<FeedState> {
     }
     return false;
   }
+
+  likeOrDislike({required String id}) {
+    if (!likedPosts.contains(id)) {
+      likedPosts.add(id);
+      emit(LikePost(posts: likedPosts));
+      emit(FeedInitial());
+    } else {
+      likedPosts.remove(id);
+      emit(DislikePost(posts: likedPosts));
+      emit(FeedInitial());
+    }
+  }
+
+
+  saveOrUnsave({required String id}) {
+    if (!savedPosts.contains(id)) {
+      savedPosts.add(id);
+      emit(SavePost(posts: savedPosts));
+      emit(FeedInitial());
+    } else {
+      savedPosts.remove(id);
+      emit(UnSavePost(posts: savedPosts));
+      emit(FeedInitial());
+    }
+  }
+
 
   @override
   Future<void> close() {

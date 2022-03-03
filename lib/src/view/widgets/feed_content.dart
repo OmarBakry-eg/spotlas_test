@@ -1,10 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:readmore/readmore.dart';
 import 'package:spotlas_test_app/src/models/feed_model.dart';
-
-import 'reusable_row_in_img_widget.dart';
+import 'package:timeago/timeago.dart' as timeago;
+import 'image_content.dart';
 import 'tags_widget.dart';
 
 class FeedContent extends StatelessWidget {
@@ -14,42 +13,10 @@ class FeedContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          height: 500,
-          foregroundDecoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Colors.transparent,
-                Colors.black12.withOpacity(0.05),
-              ],
-            ),
-          ),
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: CachedNetworkImageProvider(feedModel.defaultPhotoUrl!))),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ReusableRowInImgWidget(
-                  iconLink: "assets/img/Options.svg",
-                  name: feedModel.authorUsername!,
-                  imgURL: feedModel.authorPhotoUrl!,
-                  color: const Color(0xFFFF0040),
-                  subName: feedModel.authorFullName!),
-              ReusableRowInImgWidget(
-                  imgURL: feedModel.placeLogoUrl ?? feedModel.authorPhotoUrl!,
-                  iconLink: "assets/img/StarBorder.svg",
-                  name: feedModel.placeName!,
-                  color: Colors.white,
-                  subName:
-                      "${feedModel.placeLocationName}-${feedModel.placeLocationNameO}"),
-            ],
-          ),
+        ImageContent(
+          feedModel: feedModel,
         ),
         const SizedBox(
           height: 20,
@@ -77,6 +44,9 @@ class FeedContent extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Wrap(
+            crossAxisAlignment: WrapCrossAlignment.start,
+            runAlignment: WrapAlignment.start,
+            alignment: WrapAlignment.start,
             children: [
               Text(
                 feedModel.authorUsername!,
@@ -88,7 +58,7 @@ class FeedContent extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                width: 10,
+                width: 5,
               ),
               ReadMoreText(
                 feedModel.description!,
@@ -116,7 +86,7 @@ class FeedContent extends StatelessWidget {
         feedModel.feedModelTags == null || feedModel.feedModelTags!.isEmpty
             ? const Offstage()
             : SizedBox(
-                height: 50,
+                height: 47,
                 child: ListView.separated(
                   padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
                   scrollDirection: Axis.horizontal,
@@ -133,13 +103,13 @@ class FeedContent extends StatelessWidget {
             : const SizedBox(
                 height: 8,
               ),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              '4 days ago',
-              style: TextStyle(
+              timeago.format(feedModel.createdAt!),
+              style: const TextStyle(
                 fontFamily: 'SFProDisplay-Medium',
                 fontSize: 15,
                 color: Colors.grey,

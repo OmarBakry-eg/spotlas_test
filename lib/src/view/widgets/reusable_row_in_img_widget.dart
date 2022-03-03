@@ -27,7 +27,7 @@ class ReusableRowInImgWidget extends StatelessWidget {
             width: 56,
             height: 56,
             decoration: BoxDecoration(
-              image: DecorationImage(image: CachedNetworkImageProvider(imgURL)),
+                image: DecorationImage(image: CachedNetworkImageProvider(imgURL)),
                 color: Colors.black12,
                 border: Border.all(color: color, width: 5),
                 shape: BoxShape.circle),
@@ -36,44 +36,48 @@ class ReusableRowInImgWidget extends StatelessWidget {
         const SizedBox(
           width: 10,
         ),
-        Column(
-          children: [
-            Text(
-              name,
-              style: const TextStyle(
-                fontSize: 18,
-                color: Color(0xffffffff),
-                height: 1.1111111111111112,
-                fontWeight: FontWeight.bold,
-                shadows: [
-                  Shadow(
-                    color: Color(0xcc000000),
-                    offset: Offset(0, 1),
-                    blurRadius: 8,
-                  )
-                ],
+        SizedBox(
+          width: 200,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                name,
+                style: const TextStyle(
+                  fontSize: 18,
+                  color: Color(0xffffffff),
+                  height: 1.1111111111111112,
+                  fontWeight: FontWeight.bold,
+                  shadows: [
+                    Shadow(
+                      color: Color(0xcc000000),
+                      offset: Offset(0, 1),
+                      blurRadius: 8,
+                    )
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 6,
-            ),
-            Text(
-              subName,
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
-                color: Color(0xccffffff),
-                height: 1.3333333333333333,
-                shadows: [
-                  Shadow(
-                    color: Color(0xff000000),
-                    offset: Offset(0, 1),
-                    blurRadius: 8,
-                  )
-                ],
+              const SizedBox(
+                height: 6,
               ),
-            ),
-          ],
+              Text(
+                subName,
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xccffffff),
+                  height: 1.3333333333333333,
+                  shadows: [
+                    Shadow(
+                      color: Color(0xff000000),
+                      offset: Offset(0, 1),
+                      blurRadius: 8,
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
         const Spacer(
           flex: 1,

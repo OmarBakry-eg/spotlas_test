@@ -129,7 +129,7 @@ class FeedModel {
         distance: json["distance"],
         authorPhotoUrl: json["authorPhotoUrl"],
         photoUrls: List<String>.from(json["photoUrls"].map((x) => x)),
-        photosResolutions: List<AuthorPhotosResolutions>.from(
+        photosResolutions: json["photosResolutions"] == null ? null : List<AuthorPhotosResolutions>.from(
             json["photosResolutions"].map((x) => AuthorPhotosResolutions.fromJson(x))),
         authorPhotosResolutions:
             AuthorPhotosResolutions.fromJson(json["authorPhotosResolutions"]),

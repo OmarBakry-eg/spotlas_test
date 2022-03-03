@@ -7,13 +7,11 @@ import 'package:spotlas_test_app/src/view/utils/consts.dart';
 class FeedController {
   static List<FeedModel> feedModel = <FeedModel>[];
 
-  static Future<bool> getFeed() async {
+  static Future<bool> getFeed({required int page}) async {
     try {
-      await EasyLoading.show(status: 'Loading');
       final http.Response response = await http.get(
-        Uri.parse(API_URL),
+        Uri.parse(Consts.API_URL(page: page)),
       );
-      await EasyLoading.dismiss();
       return _responseResult(response);
     } catch (e) {
       if (kDebugMode) {
